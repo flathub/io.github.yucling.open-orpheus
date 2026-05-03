@@ -50,5 +50,5 @@ modules:
         dest-filename: pnpm-10.33.0.tgz
       - generated-cargo-sources.json
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.9.0.tar.gz
-        sha256: d9a241ee76c2997bac46e701cd497b5eb70bdbeeabf2d7d32a6be512c936f200
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.10.0.tar.gz
+        sha256: 29221b1c105e45ab395abd3602fb1a18bf029a6335532543823cfa70fa60c29d
