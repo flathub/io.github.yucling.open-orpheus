@@ -30,6 +30,7 @@ modules:
       - cp cargo/config .cargo/config
       - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
         ./pnpm-11.1.3.tgz
+      - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - pnpm install --offline --frozen-lockfile --store-dir
         $FLATPAK_BUILDER_BUILDDIR/flatpak-node/pnpm-store
       - pnpm run build:modules
