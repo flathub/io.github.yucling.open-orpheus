@@ -55,5 +55,5 @@ modules:
         sha256: 649d18ba299db28d5bcf208239295901449e171cc5e88badd127ecb233069606
       - type: patch
         paths:
-          - patches/lock.patch
-          - patches/workspace.patch
+          - lock.patch
+          - workspace.patch
