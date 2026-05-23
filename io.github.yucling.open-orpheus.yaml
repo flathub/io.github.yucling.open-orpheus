@@ -54,6 +54,4 @@ modules:
         url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.12.1.tar.gz
         sha256: 649d18ba299db28d5bcf208239295901449e171cc5e88badd127ecb233069606
       - type: patch
-        paths:
-          - lock.patch
-          - workspace.patch
+        path: pnpm.patch
