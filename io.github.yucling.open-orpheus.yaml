@@ -27,7 +27,7 @@ modules:
         ELECTRON_OFFLINE_BUILD: "1"
     build-commands:
       - mkdir -p .cargo
-      - cp cargo/config .cargo/config
+      - cp cargo/config .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
         ./pnpm-11.2.2.tgz
@@ -51,7 +51,5 @@ modules:
         dest-filename: pnpm-11.2.2.tgz
       - generated-cargo-sources.json
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.12.1.tar.gz
-        sha256: 649d18ba299db28d5bcf208239295901449e171cc5e88badd127ecb233069606
-      - type: patch
-        path: pnpm.patch
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.12.2.tar.gz
+        sha256: 7dedb4800dc063d3cba8ce067784e0d5607d5cafdf264becd322ca46671ad4e3
