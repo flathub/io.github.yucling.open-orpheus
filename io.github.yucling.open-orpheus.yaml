@@ -30,7 +30,7 @@ modules:
       - cp cargo/config .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
-        ./pnpm-11.2.2.tgz
+        ./pnpm-11.3.0.tgz
       - pnpm install --offline --frozen-lockfile --store-dir
         $FLATPAK_BUILDER_BUILDDIR/flatpak-node/pnpm-store
       - pnpm run build:modules
@@ -46,10 +46,10 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-11.2.2.tgz
-        sha512: 36e6621fad506178936455e70247b8808ef4ec25797a9f437a93281a020484e2607f6a469a22e982987c3dbb8866e3071514ab10a4a1749e06edcd1ec118436f
-        dest-filename: pnpm-11.2.2.tgz
+        url: https://registry.npmjs.org/pnpm/-/pnpm-11.3.0.tgz
+        sha512: 2c403d6594527287672b1f7056343a1f7c3634036a67ffabfcc2b3d7595d843768f8787148d1b57cf7956c90606bbd192857c363af19e96d2d0ec9ec5741d215
+        dest-filename: pnpm-11.3.0.tgz
       - generated-cargo-sources.json
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.12.2.tar.gz
-        sha256: 7dedb4800dc063d3cba8ce067784e0d5607d5cafdf264becd322ca46671ad4e3
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.13.0.tar.gz
+        sha256: 4906f84d226b461770fc3e3f26d2d5c2a12c04a3019aec8d3f9ca4c334ae43ce
