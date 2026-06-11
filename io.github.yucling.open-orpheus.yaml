@@ -6,7 +6,6 @@ base: org.electronjs.Electron2.BaseApp
 base-version: "25.08"
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
-  - org.freedesktop.Sdk.Extension.rust-stable
 command: electron-wrapper
 separate-locales: false
 finish-args:
@@ -21,7 +20,7 @@ modules:
   - name: io.github.yucling.open-orpheus
     buildsystem: simple
     build-options:
-      append-path: /usr/lib/sdk/node24/bin:/usr/lib/sdk/rust-stable/bin:/run/build/io.github.yucling.open-orpheus/.npm-prefix/bin
+      append-path: /usr/lib/sdk/node24/bin:/run/build/io.github.yucling.open-orpheus/.npm-prefix/bin:/run/build/io.github.yucling.open-orpheus/.rust/bin
       env:
         XDG_CACHE_HOME: /run/build/io.github.yucling.open-orpheus/flatpak-node/cache
         ELECTRON_OFFLINE_BUILD: "1"
@@ -30,12 +29,25 @@ modules:
       - cp cargo/config .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
-        ./pnpm-11.5.0.tgz
+        ./pnpm-11.5.3.tgz
       - pnpm install --offline --frozen-lockfile --store-dir
         $FLATPAK_BUILDER_BUILDDIR/flatpak-node/pnpm-store
+      - tar xf wasm-bindgen-*.tar.gz
+      - install -Dm755 wasm-bindgen-*/wasm-bindgen
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/wasm-bindgen
+      - install -Dm755 wasm-bindgen-*/wasm-bindgen-test-runner
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/wasm-bindgen-test-runner ||
+        true
+      - tar xf rust-1.96.0-*.tar.xz
+      - ./rust-1.96.0-*/install.sh --prefix=$FLATPAK_BUILDER_BUILDDIR/.rust
+        --without=rust-docs --disable-ldconfig
+      - tar xf rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
+      - cp -r
+        rust-std-1.96.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown
+        $FLATPAK_BUILDER_BUILDDIR/.rust/lib/rustlib/wasm32-unknown-unknown
       - pnpm run build:modules
-      - node --experimental-strip-types scripts/install-flatpak-scaffolding.mts
       - pnpm run package
+      - node scripts/install-flatpak-scaffolding.mts out/open-orpheus-linux-*
       - install -d /app/lib/io.github.yucling.open-orpheus
       - cp -r out/open-orpheus-linux-*/. /app/lib/io.github.yucling.open-orpheus/
       - install -d /app/bin
@@ -46,10 +58,38 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-11.5.0.tgz
-        sha512: dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1
-        dest-filename: pnpm-11.5.0.tgz
+        url: https://registry.npmjs.org/pnpm/-/pnpm-11.5.3.tgz
+        sha512: 7ac1c919341c213a34dc0d02afb7143c5c26ac26ee8c4782deea821b8ac64d2134a081fd8941dae6e29bbb48f58dfc2b7fbceeccc07cb2f09d219d342a4969ed
+        dest-filename: pnpm-11.5.3.tgz
       - generated-cargo-sources.json
+      - type: file
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.123/wasm-bindgen-0.2.123-x86_64-unknown-linux-musl.tar.gz
+        sha256: 80fc5c1d5c128fd67e99b14318eeabf79dfbadf459ece2d38ba93a82e55730c6
+        dest-filename: wasm-bindgen-0.2.123-x86_64-unknown-linux-musl.tar.gz
+        only-arches:
+          - x86_64
+      - type: file
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.123/wasm-bindgen-0.2.123-aarch64-unknown-linux-gnu.tar.gz
+        sha256: c800cc196139d8db4af26ca3343be64e6ccf9f5208d5350d843ecec9e8d18d43
+        dest-filename: wasm-bindgen-0.2.123-aarch64-unknown-linux-gnu.tar.gz
+        only-arches:
+          - aarch64
+      - type: file
+        url: https://static.rust-lang.org/dist/rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz
+        sha256: c295047583a56238ea06b43f849f4b877fa12bfd4c7103f8d9a74c94c9c4e108
+        dest-filename: rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz
+        only-arches:
+          - x86_64
+      - type: file
+        url: https://static.rust-lang.org/dist/rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz
+        sha256: 371eadcca97062219cbd8593628eb5d2802bc370515d085fedce1b56b2baed57
+        dest-filename: rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz
+        only-arches:
+          - aarch64
+      - type: file
+        url: https://static.rust-lang.org/dist/rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
+        sha256: 5a360604f50aaf62320bd2201f6e97113bbdb2a93881c66889dd90cdbaab51a0
+        dest-filename: rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.13.1.tar.gz
-        sha256: 532d00d65d310e6a2c9b63221b3874bbf069f037da41b49abd148b156edcd932
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.14.0.tar.gz
+        sha256: 211293c36d481e6d8279077629df620648e0bfe3eb7837b8ea74cb2e7ce7f222
