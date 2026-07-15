@@ -29,7 +29,7 @@ modules:
       - cp cargo/config .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
-        ./pnpm-11.5.3.tgz
+        ./pnpm-11.13.0.tgz
       - pnpm install --offline --frozen-lockfile --store-dir
         $FLATPAK_BUILDER_BUILDDIR/flatpak-node/pnpm-store
       - tar xf wasm-bindgen-*.tar.gz
@@ -58,9 +58,9 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-11.5.3.tgz
-        sha512: 7ac1c919341c213a34dc0d02afb7143c5c26ac26ee8c4782deea821b8ac64d2134a081fd8941dae6e29bbb48f58dfc2b7fbceeccc07cb2f09d219d342a4969ed
-        dest-filename: pnpm-11.5.3.tgz
+        url: https://registry.npmjs.org/pnpm/-/pnpm-11.13.0.tgz
+        sha512: 88d94724d8f2e6c186744a5584c6e59ecac869ec7ba15e9cb4cd628e8dc7066820b2481d8ee3b51ea8da323a7378068aa58c556a3720d32b7c20a051d088363a
+        dest-filename: pnpm-11.13.0.tgz
       - generated-cargo-sources.json
       - type: file
         url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.123/wasm-bindgen-0.2.123-x86_64-unknown-linux-musl.tar.gz
@@ -91,5 +91,5 @@ modules:
         sha256: 5a360604f50aaf62320bd2201f6e97113bbdb2a93881c66889dd90cdbaab51a0
         dest-filename: rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.15.3.tar.gz
-        sha256: 2dd14ce8b70ab0a79d14767494e6335a2613eda9de5920085270035f2b2f06ee
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.16.0.tar.gz
+        sha256: a508115c3e7439c37561d61cedb31f51b9cc140618a98b6044ecf5e587c44626
