@@ -91,5 +91,5 @@ modules:
         sha256: 5a360604f50aaf62320bd2201f6e97113bbdb2a93881c66889dd90cdbaab51a0
         dest-filename: rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.16.0.tar.gz
-        sha256: a508115c3e7439c37561d61cedb31f51b9cc140618a98b6044ecf5e587c44626
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.16.1.tar.gz
+        sha256: aaad6804c864ca6691be37a8119ece57baf5a8a65661d2c4d67ea5e87b18524a
