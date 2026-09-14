@@ -36,6 +36,13 @@ modules:
       - install -Dm755 wasm-bindgen-*/wasm-bindgen-test-runner
         $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/wasm-bindgen-test-runner ||
         true
+      - tar xf cargo-zigbuild-*.tar.xz
+      - install -Dm755 cargo-zigbuild-*/cargo-zigbuild
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/cargo-zigbuild
+      - tar xf zig-*.tar.xz
+      - mv zig-*-linux-*/ $FLATPAK_BUILDER_BUILDDIR/.zig
+      - ln -sf $FLATPAK_BUILDER_BUILDDIR/.zig/zig
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/zig
       - tar xf rust-1.96.0-*.tar.xz
       - ./rust-1.96.0-*/install.sh --prefix=$FLATPAK_BUILDER_BUILDDIR/.rust
         --without=rust-docs --disable-ldconfig
@@ -89,8 +96,32 @@ modules:
         url: https://static.rust-lang.org/dist/rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
         sha256: 5a360604f50aaf62320bd2201f6e97113bbdb2a93881c66889dd90cdbaab51a0
         dest-filename: rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
+      - type: file
+        url: https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.23.4/cargo-zigbuild-x86_64-unknown-linux-gnu.tar.xz
+        sha256: 6b69963040818ca1ef573d8135a95aa902e17cf7f873c32c6426642dadfe7f59
+        dest-filename: cargo-zigbuild-x86_64-unknown-linux-gnu.tar.xz
+        only-arches:
+          - x86_64
+      - type: file
+        url: https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.23.4/cargo-zigbuild-aarch64-unknown-linux-gnu.tar.xz
+        sha256: 25cf2cdc6cde848b33a761ff2cf46d1efe6ba7e1adfc4b6f3ee2d570cacb5419
+        dest-filename: cargo-zigbuild-aarch64-unknown-linux-gnu.tar.xz
+        only-arches:
+          - aarch64
+      - type: file
+        url: https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz
+        sha256: 70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00
+        dest-filename: zig-x86_64-linux-0.16.0.tar.xz
+        only-arches:
+          - x86_64
+      - type: file
+        url: https://ziglang.org/download/0.16.0/zig-aarch64-linux-0.16.0.tar.xz
+        sha256: ea4b09bfb22ec6f6c6ceac57ab63efb6b46e17ab08d21f69f3a48b38e1534f17
+        dest-filename: zig-aarch64-linux-0.16.0.tar.xz
+        only-arches:
+          - aarch64
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.17.0.tar.gz
-        sha256: 733099d273718e9f27b2776e519f73edd8d4dd0b2e471c6b8bc2cb7fb3f44b3e
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.17.1.tar.gz
+        sha256: 4db4cd38beac45776160faf88df24195e600c5d26efadfdbae33d86154e1b01f
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
