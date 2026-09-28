@@ -1,9 +1,9 @@
 app-id: io.github.yucling.open-orpheus
 runtime: org.freedesktop.Platform
-runtime-version: "25.08"
+runtime-version: "26.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: "25.08"
+base-version: "26.08"
 command: electron-wrapper
 separate-locales: false
 finish-args:
@@ -121,7 +121,7 @@ modules:
         only-arches:
           - aarch64
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.17.1.tar.gz
-        sha256: 4db4cd38beac45776160faf88df24195e600c5d26efadfdbae33d86154e1b01f
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.18.0.tar.gz
+        sha256: bc547dc2d80b76df036bfdda84a6a00436d4ee9dbf10f3df8526115f89763b42
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
