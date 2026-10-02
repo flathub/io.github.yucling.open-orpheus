@@ -26,8 +26,17 @@ modules:
       - mkdir -p .cargo
       - cp cargo/config .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
-      - npm install -g --prefix $FLATPAK_BUILDER_BUILDDIR/.npm-prefix
-        ./pnpm-11.24.0.tgz
+      - npm install -g --ignore-scripts --omit=optional --no-audit --no-fund
+        --offline --no-update-notifier --prefix
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix ./pnpm-12.8.1.tgz
+      - install -d
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/lib/node_modules/@pnpm/exe.linux-$(node
+        -p process.arch)
+      - tar xf pnpm-exe-*.tgz -C
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/lib/node_modules/@pnpm/exe.linux-$(node
+        -p process.arch) --strip-components=1
+      - node
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/lib/node_modules/pnpm/install.js
       - pnpm install --offline --frozen-lockfile --store-dir
         $FLATPAK_BUILDER_BUILDDIR/flatpak-node/pnpm-store
       - tar xf wasm-bindgen-*.tar.gz
@@ -64,20 +73,32 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-11.24.0.tgz
-        sha512: bd27e345e976dcb0be0b7a1228217b049a817e21b1f355c90dbe7dc46671895a8bc1e6d06c24554505ea93ea0b45f489a27ec1bfbc8de6a9659fca0f16fa0000
-        dest-filename: pnpm-11.24.0.tgz
-      - generated-cargo-sources.json
+        url: https://registry.npmjs.org/pnpm/-/pnpm-12.8.1.tgz
+        sha512: f64ba907507f5ceafe06c8d38e6052d0179444580ec1279ddd5bfc11cb48aa8a2644b66598e07e761da84872a9fc57d5f902b87fa49d024198d558612aabbe45
+        dest-filename: pnpm-12.8.1.tgz
       - type: file
-        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.128/wasm-bindgen-0.2.128-x86_64-unknown-linux-musl.tar.gz
-        sha256: b51f0208fdff83515a787bd8ab9ac5865ed84dabb66d0c709957bb59793c645f
-        dest-filename: wasm-bindgen-0.2.128-x86_64-unknown-linux-musl.tar.gz
+        url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.8.1.tgz
+        sha512: f1b0d9d2566509d8b6aef9c5ba5ec4620702ef329e5927bbeb2f09576a17a1b692f29f62f5de8f49fe8b80bb533347c8ed1f4e87878b09bbde5f2343326bd9fa
+        dest-filename: pnpm-exe-x86_64.tgz
         only-arches:
           - x86_64
       - type: file
-        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.128/wasm-bindgen-0.2.128-aarch64-unknown-linux-gnu.tar.gz
-        sha256: 2f61267bbef279c2d6357b199649468b073223febde4ae108d30ac3d6b5540af
-        dest-filename: wasm-bindgen-0.2.128-aarch64-unknown-linux-gnu.tar.gz
+        url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.8.1.tgz
+        sha512: ab8b3d6bd5f63b737d69e505a285b6e28acdaf1beedb4fa3c9550547945a9cf0aa38a28f06b82cda2cb0324041c75697924cdd593e78fe67f3f017bcb0995613
+        dest-filename: pnpm-exe-aarch64.tgz
+        only-arches:
+          - aarch64
+      - generated-cargo-sources.json
+      - type: file
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.129/wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
+        sha256: 82d12bb940e2d4e72e0d5605387fc1b8ca179044e012b620f0ce4e7440e8320e
+        dest-filename: wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
+        only-arches:
+          - x86_64
+      - type: file
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.129/wasm-bindgen-0.2.129-aarch64-unknown-linux-gnu.tar.gz
+        sha256: 1797c349a0f45d30946e8986b184135e12839ab576c9a04203e85febfc5dcb35
+        dest-filename: wasm-bindgen-0.2.129-aarch64-unknown-linux-gnu.tar.gz
         only-arches:
           - aarch64
       - type: file
@@ -121,7 +142,7 @@ modules:
         only-arches:
           - aarch64
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.18.0.tar.gz
-        sha256: bc547dc2d80b76df036bfdda84a6a00436d4ee9dbf10f3df8526115f89763b42
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.19.1.tar.gz
+        sha256: 2d5d07cdb4a5edbbd47376850584dd209799bb6133b4587da6875cd930341448
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
