@@ -28,7 +28,7 @@ modules:
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --ignore-scripts --omit=optional --no-audit --no-fund
         --offline --no-update-notifier --prefix
-        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix ./pnpm-12.8.1.tgz
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix ./pnpm-12.9.1.tgz
       - install -d
         $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/lib/node_modules/@pnpm/exe.linux-$(node
         -p process.arch)
@@ -73,18 +73,18 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-12.8.1.tgz
-        sha512: f64ba907507f5ceafe06c8d38e6052d0179444580ec1279ddd5bfc11cb48aa8a2644b66598e07e761da84872a9fc57d5f902b87fa49d024198d558612aabbe45
-        dest-filename: pnpm-12.8.1.tgz
+        url: https://registry.npmjs.org/pnpm/-/pnpm-12.9.1.tgz
+        sha512: 06b055fff5cd20dc12781de173ced3310ce0951bf2ec620211a16045d5444d5c93a663210764ef29a653a610459ba0368f0e74f84d80c54723cf95aae7bc0d6d
+        dest-filename: pnpm-12.9.1.tgz
       - type: file
-        url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.8.1.tgz
-        sha512: f1b0d9d2566509d8b6aef9c5ba5ec4620702ef329e5927bbeb2f09576a17a1b692f29f62f5de8f49fe8b80bb533347c8ed1f4e87878b09bbde5f2343326bd9fa
+        url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.9.1.tgz
+        sha512: f8ce4def884ce1f73cec001c931c7f5085be7549d67f67a4a3e1dc849b3f3595317a12e17a4372308fc635a35796f77e91647ef7b5d7043e755d192436252dac
         dest-filename: pnpm-exe-x86_64.tgz
         only-arches:
           - x86_64
       - type: file
-        url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.8.1.tgz
-        sha512: ab8b3d6bd5f63b737d69e505a285b6e28acdaf1beedb4fa3c9550547945a9cf0aa38a28f06b82cda2cb0324041c75697924cdd593e78fe67f3f017bcb0995613
+        url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.9.1.tgz
+        sha512: 731fae17ac6ac04b66ec1f0d57ed6f7b4c4183d81cbb3419e51fb45a0396bca1bf87defc5258d2e81816b358a9206b8681475e5619b73ca98196d5c871cccb5c
         dest-filename: pnpm-exe-aarch64.tgz
         only-arches:
           - aarch64
@@ -142,7 +142,7 @@ modules:
         only-arches:
           - aarch64
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.19.1.tar.gz
-        sha256: 2d5d07cdb4a5edbbd47376850584dd209799bb6133b4587da6875cd930341448
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.19.2.tar.gz
+        sha256: 72720b90b39b80acba429967dba88704863478eb1f493d2eb158ab7b33bba6e1
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
