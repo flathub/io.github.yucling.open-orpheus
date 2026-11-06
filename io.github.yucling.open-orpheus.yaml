@@ -14,6 +14,7 @@ finish-args:
   - --socket=pulseaudio
   - --share=network
   - --talk-name=org.kde.StatusNotifierWatcher
+  - --own-name=io.github.yucling.OpenOrpheus
 modules:
   - name: open-orpheus
     buildsystem: simple
@@ -23,12 +24,11 @@ modules:
         XDG_CACHE_HOME: /run/build/open-orpheus/flatpak-node/cache
         ELECTRON_OFFLINE_BUILD: "1"
     build-commands:
-      - mkdir -p .cargo
-      - cp cargo/config .cargo/config.toml
+      - cat cargo/config >> .cargo/config.toml
       - "echo 'minimumReleaseAge: 0' >> pnpm-workspace.yaml"
       - npm install -g --ignore-scripts --omit=optional --no-audit --no-fund
         --offline --no-update-notifier --prefix
-        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix ./pnpm-12.9.1.tgz
+        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix ./pnpm-12.18.0.tgz
       - install -d
         $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/lib/node_modules/@pnpm/exe.linux-$(node
         -p process.arch)
@@ -45,21 +45,14 @@ modules:
       - install -Dm755 wasm-bindgen-*/wasm-bindgen-test-runner
         $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/wasm-bindgen-test-runner ||
         true
-      - tar xf cargo-zigbuild-*.tar.xz
-      - install -Dm755 cargo-zigbuild-*/cargo-zigbuild
-        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/cargo-zigbuild
-      - tar xf zig-*.tar.xz
-      - mv zig-*-linux-*/ $FLATPAK_BUILDER_BUILDDIR/.zig
-      - ln -sf $FLATPAK_BUILDER_BUILDDIR/.zig/zig
-        $FLATPAK_BUILDER_BUILDDIR/.npm-prefix/bin/zig
-      - tar xf rust-1.96.0-*.tar.xz
-      - ./rust-1.96.0-*/install.sh --prefix=$FLATPAK_BUILDER_BUILDDIR/.rust
+      - tar xf rust-1.99.1-*.tar.xz
+      - ./rust-1.99.1-*/install.sh --prefix=$FLATPAK_BUILDER_BUILDDIR/.rust
         --without=rust-docs --disable-ldconfig
-      - tar xf rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
+      - tar xf rust-std-1.99.1-wasm32-unknown-unknown.tar.xz
       - cp -r
-        rust-std-1.96.0-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown
+        rust-std-1.99.1-wasm32-unknown-unknown/rust-std-wasm32-unknown-unknown/lib/rustlib/wasm32-unknown-unknown
         $FLATPAK_BUILDER_BUILDDIR/.rust/lib/rustlib/wasm32-unknown-unknown
-      - pnpm run build:modules
+      - SKIP_PLATFORM_VARIANT=1 pnpm run build:modules
       - pnpm run package
       - node scripts/build-scaffold.ts /app --name open-orpheus --desktop-name
         io.github.yucling.open-orpheus --icon-app-name
@@ -73,76 +66,52 @@ modules:
     sources:
       - generated-node-sources.json
       - type: file
-        url: https://registry.npmjs.org/pnpm/-/pnpm-12.9.1.tgz
-        sha512: 06b055fff5cd20dc12781de173ced3310ce0951bf2ec620211a16045d5444d5c93a663210764ef29a653a610459ba0368f0e74f84d80c54723cf95aae7bc0d6d
-        dest-filename: pnpm-12.9.1.tgz
+        url: https://registry.npmjs.org/pnpm/-/pnpm-12.18.0.tgz
+        sha512: 9d7882d5dc82147ecfc4e062aa34834e0ad0296710a1837a1115ae012127d36b7109e321ac1598a1dd0a65597681b1e99917e12ed0d749eae91187943363beb3
+        dest-filename: pnpm-12.18.0.tgz
       - type: file
-        url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.9.1.tgz
-        sha512: f8ce4def884ce1f73cec001c931c7f5085be7549d67f67a4a3e1dc849b3f3595317a12e17a4372308fc635a35796f77e91647ef7b5d7043e755d192436252dac
+        url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.18.0.tgz
+        sha512: 389f97db072b6a5742c23ef9a4221ead601141246975f8f47814ecff6383ca17de5b8eb294e9e34c813f18aadae8c9fa13bdbf8019974bc8a0ad48a86be17d7d
         dest-filename: pnpm-exe-x86_64.tgz
         only-arches:
           - x86_64
       - type: file
-        url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.9.1.tgz
-        sha512: 731fae17ac6ac04b66ec1f0d57ed6f7b4c4183d81cbb3419e51fb45a0396bca1bf87defc5258d2e81816b358a9206b8681475e5619b73ca98196d5c871cccb5c
+        url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.18.0.tgz
+        sha512: d9da725410874fe15fa6e421f62fbb31702a35660b0af0f9bd8af9a7a1229b1a206bc5122e78db520ca3ef600eaced218dce6b8b74c414fde38b20478e4499a5
         dest-filename: pnpm-exe-aarch64.tgz
         only-arches:
           - aarch64
       - generated-cargo-sources.json
       - type: file
-        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.129/wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
-        sha256: 82d12bb940e2d4e72e0d5605387fc1b8ca179044e012b620f0ce4e7440e8320e
-        dest-filename: wasm-bindgen-0.2.129-x86_64-unknown-linux-musl.tar.gz
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.130/wasm-bindgen-0.2.130-x86_64-unknown-linux-musl.tar.gz
+        sha256: 9687f3bb551b9f66f37ed32a40d7913a00f7962db653054e56857bc306c3227f
+        dest-filename: wasm-bindgen-0.2.130-x86_64-unknown-linux-musl.tar.gz
         only-arches:
           - x86_64
       - type: file
-        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.129/wasm-bindgen-0.2.129-aarch64-unknown-linux-gnu.tar.gz
-        sha256: 1797c349a0f45d30946e8986b184135e12839ab576c9a04203e85febfc5dcb35
-        dest-filename: wasm-bindgen-0.2.129-aarch64-unknown-linux-gnu.tar.gz
+        url: https://github.com/wasm-bindgen/wasm-bindgen/releases/download/0.2.130/wasm-bindgen-0.2.130-aarch64-unknown-linux-gnu.tar.gz
+        sha256: cc8dd8e90aa9111758168d30c63a14b7f0276997d9d60d3e160a1fb5e7d3b919
+        dest-filename: wasm-bindgen-0.2.130-aarch64-unknown-linux-gnu.tar.gz
         only-arches:
           - aarch64
       - type: file
-        url: https://static.rust-lang.org/dist/rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz
-        sha256: c295047583a56238ea06b43f849f4b877fa12bfd4c7103f8d9a74c94c9c4e108
-        dest-filename: rust-1.96.0-x86_64-unknown-linux-gnu.tar.xz
+        url: https://static.rust-lang.org/dist/rust-1.99.1-x86_64-unknown-linux-gnu.tar.xz
+        sha256: 231fcae47ee950621374725b5fc3b5441d2fbda2955ac45dd7dc816d8876cfe7
+        dest-filename: rust-1.99.1-x86_64-unknown-linux-gnu.tar.xz
         only-arches:
           - x86_64
       - type: file
-        url: https://static.rust-lang.org/dist/rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz
-        sha256: 371eadcca97062219cbd8593628eb5d2802bc370515d085fedce1b56b2baed57
-        dest-filename: rust-1.96.0-aarch64-unknown-linux-gnu.tar.xz
+        url: https://static.rust-lang.org/dist/rust-1.99.1-aarch64-unknown-linux-gnu.tar.xz
+        sha256: a48fb1e853be56ce9b8e2751f5464dbd5e16440cd81e237920f3a5e7e806333e
+        dest-filename: rust-1.99.1-aarch64-unknown-linux-gnu.tar.xz
         only-arches:
           - aarch64
       - type: file
-        url: https://static.rust-lang.org/dist/rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
-        sha256: 5a360604f50aaf62320bd2201f6e97113bbdb2a93881c66889dd90cdbaab51a0
-        dest-filename: rust-std-1.96.0-wasm32-unknown-unknown.tar.xz
-      - type: file
-        url: https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.23.4/cargo-zigbuild-x86_64-unknown-linux-gnu.tar.xz
-        sha256: 6b69963040818ca1ef573d8135a95aa902e17cf7f873c32c6426642dadfe7f59
-        dest-filename: cargo-zigbuild-x86_64-unknown-linux-gnu.tar.xz
-        only-arches:
-          - x86_64
-      - type: file
-        url: https://github.com/rust-cross/cargo-zigbuild/releases/download/v0.23.4/cargo-zigbuild-aarch64-unknown-linux-gnu.tar.xz
-        sha256: 25cf2cdc6cde848b33a761ff2cf46d1efe6ba7e1adfc4b6f3ee2d570cacb5419
-        dest-filename: cargo-zigbuild-aarch64-unknown-linux-gnu.tar.xz
-        only-arches:
-          - aarch64
-      - type: file
-        url: https://ziglang.org/download/0.16.0/zig-x86_64-linux-0.16.0.tar.xz
-        sha256: 70e49664a74374b48b51e6f3fdfbf437f6395d42509050588bd49abe52ba3d00
-        dest-filename: zig-x86_64-linux-0.16.0.tar.xz
-        only-arches:
-          - x86_64
-      - type: file
-        url: https://ziglang.org/download/0.16.0/zig-aarch64-linux-0.16.0.tar.xz
-        sha256: ea4b09bfb22ec6f6c6ceac57ab63efb6b46e17ab08d21f69f3a48b38e1534f17
-        dest-filename: zig-aarch64-linux-0.16.0.tar.xz
-        only-arches:
-          - aarch64
+        url: https://static.rust-lang.org/dist/rust-std-1.99.1-wasm32-unknown-unknown.tar.xz
+        sha256: 5f628f857dd00a8aa3fcac2e275665d2782066a5795274ed124c5b560f46423c
+        dest-filename: rust-std-1.99.1-wasm32-unknown-unknown.tar.xz
       - type: archive
-        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.19.2.tar.gz
-        sha256: 72720b90b39b80acba429967dba88704863478eb1f493d2eb158ab7b33bba6e1
+        url: https://github.com/YUCLing/open-orpheus/archive/refs/tags/v0.20.0.tar.gz
+        sha256: 4d57ac2f5122e3e9a0b200c84f0b4e046d27dbb2a1a7addedc121c0884e73bc7
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node24
